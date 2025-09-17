@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Execution Plan Results</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .plan-step {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0;
+            padding: 20px;
+        }
+        .step-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .tool-name {
+            font-weight: bold;
+            color: #2c5aa0;
+            font-size: 18px;
+        }
+        .file-path {
+            color: #666;
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        .content-section {
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .content-label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        pre {
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .success-check {
+            color: #28a745;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .on-fail {
+            color: #dc3545;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .center {
+            text-align: center;
+        }
+        button {
+            margin: 10px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .download-btn {
+            background: #28a745;
+        }
+        .download-btn:hover {
+            background: #218838;
+        }
+        .execute-form {
+            margin-top: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 Execution Plan Results</h1>
+    
+    <h2>Generated Plan Steps</h2>
+    
+    {% for step in plan %}
+    <div class="plan-step">
+        <div class="step-header">
+            <span class="tool-name">{{ step.tool }}</span>
+            {% if step.args.file_path %}
+            <span class="file-path">{{ step.args.file_path }}</span>
+            {% endif %}
+        </div>
+        
+        {% if step.args.content %}
+        <div class="content-section">
+            <div class="content-label">File Content:</div>
+            <pre>{{ step.args.content }}</pre>
+        </div>
+        {% endif %}
+        
+        {% if step.success_check %}
+        <div class="success-check">✅ {{ step.success_check }}</div>
+        {% endif %}
+        
+        {% if step.on_fail %}
+        <div class="on-fail">⚠️ {{ step.on_fail }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    
+    <div class="execute-form">
+        <form action="/execute" method="post">
+            <input type="hidden" name="plan_data" value='{{ plan | tojson }}'>
+            <button type="submit">🚀 Execute Plan</button>
+        </form>
+        
+        <form action="/download-plan" method="post">
+            <input type="hidden" name="plan_data" value='{{ plan | tojson }}'>
+            <input type="hidden" name="scan_data" value='{{ scan | tojson }}'>
+            <button type="submit" class="download-btn">📥 Download Plan as Markdown</button>
+        </form>
+        
+        <form action="/" method="get">
+            <button type="submit">🏠 Back to Home</button>
+        </form>
+    </div>
+</body>
+</html>

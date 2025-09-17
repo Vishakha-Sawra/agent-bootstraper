@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Execution Plan</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .failed {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .skipped {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .center {
+            text-align: center;
+        }
+        button {
+            margin: 10px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .download-btn {
+            background: #28a745;
+        }
+        .download-btn:hover {
+            background: #218838;
+        }
+        .file-output {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0;
+            padding: 20px;
+        }
+        .file-output h3 {
+            color: #2c5aa0;
+            margin-top: 0;
+        }
+        .file-output pre {
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <h1>📋 Execution Plan Results</h1>
+    
+    <h2>Generated Files</h2>
+    {% for file in files %}
+    <div class="file-output">
+        <h3>{{ file.tool }} - {{ file.file_path }}</h3>
+        <pre>{{ file.content }}</pre>
+    </div>
+    {% endfor %}
+
+    <div class="center">
+        <form action="/download-execution-results" method="post">
+            <input type="hidden" name="execution_data" value='{{ plan | tojson }}'>
+            <input type="hidden" name="files_data" value='{{ files | tojson }}'>
+            <button type="submit" class="download-btn">📥 Download as Markdown</button>
+        </form>
+        
+        <form action="/" method="get">
+            <button type="submit">🏠 Back to Home</button>
+        </form>
+    </div>
+</body>
+</html>

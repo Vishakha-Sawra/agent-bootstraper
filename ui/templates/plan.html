@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scan Results</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <h1>Scan Summary</h1>
+  <pre>{{ scan | tojson(indent=2) }}</pre>
+
+  <form action="/plan" method="post">
+    <input type="hidden" name="project_data" value='{{ scan | tojson }}'>
+    <button type="submit">Generate Plan</button>
+  </form>
+</body>
+</html>

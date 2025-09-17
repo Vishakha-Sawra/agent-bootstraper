@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agentic UI - Repo Scanner</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <h1>Scan Repository</h1>
+  <form action="/scan" method="post">
+    <label>Repository URL:</label>
+    <input type="text" name="repo_url" required>
+    <br>
+    <label>Branch:</label>
+    <input type="text" name="branch" value="main">
+    <br>
+    <button type="submit">Scan</button>
+  </form>
+</body>
+</html>
